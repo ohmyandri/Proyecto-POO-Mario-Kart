@@ -4,7 +4,7 @@ public class Coche implements Runnable {
     //referencia al recurso compartido, la pista
     private Pista pista_compartida;
     //Atributos del estado de la carrera:
-    private int posicion = 0; //Ya que todos inician en 0
+    private int posicion = 1; //Ya que todos inician en 1, el 1/100 de la pista
     private int turnos_efecto = 0;
     private Efecto efecto_actual = null; //Es el efecto que se le aplico al abrir la caja
     private String mensaje_turno_actual;
