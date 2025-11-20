@@ -14,7 +14,7 @@ public class Pista {
     private final List<Coche> LISTA_LLEGADA = Collections.synchronizedList(new ArrayList<>());
     
     //Constructor de la pista:
-    public void getParticipantes(List <Coche> participantes){
+    public void setParticipantes(List <Coche> participantes){
         this.participantes = participantes;
     }
 
