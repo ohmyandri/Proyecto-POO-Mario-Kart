@@ -29,13 +29,13 @@ public class Pista {
         //Simulamos el avance uno en uno, asi no hay saltos de posicion 1 hasta la 6, si no que va revisando durante cada momento que avanza la casilla
         
         for(int i = 1; i <= avance; i++){
-            coche.avanzar(avance);
+            coche.avanzar(1);
             //Verificacion de llegada a la meta:
-            if(coche.getPosicion() >= 100){
+            if(coche.getPosicion() >= LONGITUD_PISTA){
                 registrarLlegada(coche);
             }
             //Verificacion de caja misteriosa:
-            if(coche.getPosicion() % 10 == 0){
+            else if(coche.getPosicion() % 10 == 0){
                 //Llamamos al metodo aun no implementado de usar la caja de objetos en la que estamos:
 
                 //Al llegar a la caja, paramos el avance, abrimos la caja, tomamos el efecto
@@ -47,5 +47,34 @@ public class Pista {
 
 
     //Metodo aplicar efecto:
-    
+    public synchronized Efecto aplicarObjeto(Coche coche){
+        //Decidiendo a que jugador se le aplicara
+        /*variable que dira el tamano de la lista de participantes para saber que rango de numeros tomar un num random*/
+        int num_participantes = participantes.size();
+        int index_participante_afectado = randomizer.nextInt(num_participantes);
+        Coche coche_objetivo = participantes.get(index_participante_afectado);
+
+        //Usamos la instancia randomizer para obtener un numero 0-1, decidiendo asi cual sera el efecto que se aplicara
+        int eleccion_efecto = randomizer.nextInt(2);
+        //Efecto que se va aplicar:
+        Efecto efecto_aplicar = null;
+        
+        try {
+            if(eleccion_efecto == 0){
+                efecto_aplicar = new ReducirTurnos("Reducir turnos", 3);
+                efecto_aplicar.aplicarEfecto(coche_objetivo);
+            }
+            //Else significara salio 1
+            else{
+                efecto_aplicar = new DetenerAutoTurnos("Detener", 3);
+                efecto_aplicar.aplicarEfecto(coche_objetivo);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Ocurrio un error inesperado");
+            e.printStackTrace();
+        }
+        
+        return efecto_aplicar;
+    }
 }
