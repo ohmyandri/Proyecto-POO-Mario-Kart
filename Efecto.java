@@ -9,5 +9,4 @@ public abstract class Efecto {
 
     //Metodo que se sobreescribira dependiendo que efecto querramos usar:
     public abstract void aplicarEfecto(Coche coche);
-    
 }
