@@ -1,4 +1,6 @@
 public class Coche implements Runnable {
+    //Atributo del limite del dado, para decir que va de 1-6 en un inicio
+    int limite_avanzar = 6;
     //Atributo nombre, siendo asi este el corredor, como mario, luigi, entre otros.
     private String nombre;
     //referencia al recurso compartido, la pista
@@ -8,6 +10,8 @@ public class Coche implements Runnable {
     private int turnos_efecto = 0;
     private Efecto efecto_actual = null; //Es el efecto que se le aplico al abrir la caja
     private String mensaje_turno_actual;
+    //Atributo para verificar si el auto se vio detenido por el efecto:
+    private Boolean esta_detenido;
 
     //Constructor con el nombre y el recurso compartido que sera la pista:
     Coche(String nombre, Pista pista_compartida){
@@ -48,6 +52,18 @@ public class Coche implements Runnable {
 
     public void setMensaje_turno(String mensaje_turno_actual){
         this.mensaje_turno_actual = mensaje_turno_actual;
+    }
+
+    public void setLimite_avanzar(int limite_avanzar){
+        this.limite_avanzar = limite_avanzar;
+    }
+
+    public void setTurnosEfecto(int turnos_efecto){
+        this.turnos_efecto = turnos_efecto;
+    }
+
+    public void setEsta_detenido(Boolean esta_detenido){
+        this.esta_detenido = esta_detenido;
     }
 
     //Metodo para avanzar casillas:
