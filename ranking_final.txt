@@ -1,1 +1,1 @@
-
+//el coche debe registrar su llegada (Puesto, Nombre, Tiempo)
