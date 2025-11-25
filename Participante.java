@@ -39,6 +39,7 @@ public class Participante implements Runnable {
 
         //El hilo continua hasta que llegue a la meta
         while (!llegoMeta) {
+            //Cada while representa un turno más
             turnosTotales++;
             if (turnosBloqueado > 0) {
                 //No se mueve por este turno
