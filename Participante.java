@@ -17,6 +17,8 @@ public class Participante implements Runnable {
 
     //Indica si ya llego a la meta
     private boolean llegoMeta;
+    //Almacena los turnos que ocupo cada participante para llegar
+    private int turnosTotales;
 
     private final Carrera carrera;
     private Random random;
