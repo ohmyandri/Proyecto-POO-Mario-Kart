@@ -79,6 +79,16 @@ public class Carrera {
         }
     }
 
+    private int obtenerLugar(Participante p) {
+        int lugar = 1;
+        for (Participante otro : participantes) {
+            if (otro.getPosicion() > p.getPosicion()) {
+                lugar++;
+            }
+        }
+        return lugar;
+    }
+
     /**
      * Dibuja la carrera en la consola al estilo del codigo que pasaron Se
      * limpia la pnatlla y se imprime el avance de cada cohce usando espacios
@@ -95,6 +105,7 @@ public class Carrera {
         for (int i = 0; i < participantes.size(); i++) {
 
             Participante p = participantes.get(i);
+            int lugar = obtenerLugar(p);
             System.out.print("- " + p.getNombre() + ": ");
 
             // Espacios que represneta el avance en la pista
@@ -102,7 +113,7 @@ public class Carrera {
                 System.out.print(" ");
             }
 
-            System.out.println(" o==> " + (i + 1));
+            System.out.println(lugar+"° o==> ");
         }
         // 🔥 Hace la animación más lenta y perceptible
         try {
