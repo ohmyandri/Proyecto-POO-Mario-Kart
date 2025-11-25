@@ -36,6 +36,7 @@ public class Participante implements Runnable {
 
     @Override
     public void run() {
+        turnosTotales++;
 
         //El hilo continua hasta que llegue a la meta
         while (!llegoMeta) {
@@ -71,7 +72,7 @@ public class Participante implements Runnable {
             if (posicion >= Carrera.META) {
                 posicion = Carrera.META;
                 llegoMeta = true;
-                carrera.registrarLlegada(this);
+                carrera.registrarLlegada(this,turnosTotales);
             }
 
             //Refrescamos la animacion
