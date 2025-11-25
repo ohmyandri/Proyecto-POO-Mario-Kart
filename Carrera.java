@@ -106,8 +106,9 @@ public class Carrera {
      * Cuando llega el ultimo, imprime el ranking
      * @param p Participante de la carrera
      */
-    public synchronized void registrarLlegada(Participante p){
+    public synchronized void registrarLlegada(Participante p, int turnos){
         ranking.add(p.getNombre());
+        RegistrosFinales.registros(p.getNombre(),puesto,turnos);
 
         if (ranking.size() == participantes.size()){
             System.out.println("\n=== RANKING FINAL ===");
