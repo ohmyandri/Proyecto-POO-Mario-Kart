@@ -17,7 +17,7 @@ public class RegistrosFinales {
                     escritor.write("======================================================\n");
                 }
                if(puesto ==1){
-                 escritor.write("********* REGISTROS DE LA ÚLTIMA CARRERA**********");
+                 escritor.write("\n********* REGISTROS DE LA ÚLTIMA CARRERA**********\n");
                }
                 escritor.write("\n-----------------------------\n");
                 escritor.write("Nombre del participante: " + nombre + "\n");
