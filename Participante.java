@@ -36,10 +36,10 @@ public class Participante implements Runnable {
 
     @Override
     public void run() {
-        turnosTotales++;
 
         //El hilo continua hasta que llegue a la meta
         while (!llegoMeta) {
+            turnosTotales++;
             if (turnosBloqueado > 0) {
                 //No se mueve por este turno
                 turnosBloqueado--;
