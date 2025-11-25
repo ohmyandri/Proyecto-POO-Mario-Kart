@@ -11,7 +11,7 @@ public class RegistrosFinales {
         //Verifica que el archivo existe
         try {
             File archivo = new File(REGISTROS_FINALES);
-            
+            //Verifica si el archivo no existe o esta vacío
             boolean esPrimerRegistro = !archivo.exists() || archivo.length() == 0;
             //Abre el archivo en modo append para agregar los registros nuevos al final del archivo sin borrar los registros ya existentes
             try (FileWriter escritor = new FileWriter(REGISTROS_FINALES, true)) {
