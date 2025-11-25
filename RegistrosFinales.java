@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class RegistrosFinales {
     private static final String REGISTROS_FINALES = "ranking_final.txt";
-    public static void registrar(String nombre, int puesto, int turnosTotales) {
+    public static synchronized void registrar(String nombre, int puesto, int turnosTotales) {
         try {
             File archivo = new File(REGISTROS_FINALES);
             boolean esPrimerRegistro = !archivo.exists() || archivo.length() == 0;
