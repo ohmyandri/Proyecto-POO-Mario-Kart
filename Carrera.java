@@ -1,9 +1,10 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
 public class Carrera {
+
     //Distancia de la pista
     public static final int META = 100;
 
@@ -16,40 +17,38 @@ public class Carrera {
     //Generador de numeros aletoriso para objetps y decisiones aleatorias
     private final Random random;
 
-
-    public Carrera(){
+    public Carrera() {
         this.participantes = new ArrayList<>();
         this.ranking = new ArrayList<>();
         this.random = new Random();
     }
 
     //Metodo para agregar Participante
-    public synchronized void agregarParticipante(Participante p){
+    public synchronized void agregarParticipante(Participante p) {
         participantes.add(p);
     }
 
     /**
-     * Metodo para registrar nuevas posiciones
-     * Aqui se revisa si cayo en un espacio de objetos
+     * Metodo para registrar nuevas posiciones Aqui se revisa si cayo en un
+     * espacio de objetos
      */
-
-    public synchronized void actualizarParticipante(Participante participante){
+    public synchronized void actualizarParticipante(Participante participante) {
         //Cada 10 espacios hay un objeto
-        if (participante.getPosicion() % 10 == 0 && participante.getPosicion() > 0 && participante.getPosicion() < META){
+        if (participante.getPosicion() % 10 == 0 && participante.getPosicion() > 0 && participante.getPosicion() < META) {
             aplicarObjeto(participante);
         }
     }
 
     /**
-     * Metodo para aplicar los objetos
-     * 0 = reduccion del dado por 3 turnos
-     * 1 = bloquo por 3 turnos
+     * Metodo para aplicar los objetos 0 = reduccion del dado por 3 turnos 1 =
+     * bloquo por 3 turnos
+     *
      * @param lanzador Participante que lanza el objeto
      */
-    public synchronized void aplicarObjeto(Participante lanzador){
+    public synchronized void aplicarObjeto(Participante lanzador) {
 
         // Si hay un solo coche, no se puede seleccionar objetivo
-        if (participantes.size() <= 1){
+        if (participantes.size() <= 1) {
             return;
         }
 
@@ -58,27 +57,33 @@ public class Carrera {
 
         do {
             objetivo = participantes.get(random.nextInt(participantes.size()));
-        }while (objetivo == lanzador);
 
+        } while (objetivo == lanzador);
 
         //Seleccionar efecto aleatorio
         int tipo = random.nextInt(2); //0 = reduccion, 1 = bloqueo
 
-        if (tipo == 0){
+        if (tipo == 0) {
             System.out.println(lanzador.getNombre() + " lanzó REDUCCIÓN a " + objetivo.getNombre());
+
             objetivo.aplicarReduccion(3);
 
-        }else {
+        } else {
             System.out.println(lanzador.getNombre() + " lanzó BLOQUEO a " + objetivo.getNombre());
             objetivo.aplicarBloqueo(3);
+        }
+        try {
+            Thread.sleep(900);  // Ajusta si lo quieres aún más lento
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
     /**
-     * Dibuja la carrera en la consola al estilo del codigo que pasaron
-     * Se limpia la pnatlla y se imprime el avance de cada cohce usando espacios
+     * Dibuja la carrera en la consola al estilo del codigo que pasaron Se
+     * limpia la pnatlla y se imprime el avance de cada cohce usando espacios
      */
-    public synchronized void refrescarPantalla(){
+    public synchronized void refrescarPantalla() {
 
         //Limpia la consola usando codigos ASCII
         System.out.print("\033[H\033[2J");
@@ -87,44 +92,51 @@ public class Carrera {
         System.out.println("=== MARIO KART ===");
 
         //Recorrer cada participante para visualizarlo
-        for (int i = 0; i < participantes.size(); i++){
+        for (int i = 0; i < participantes.size(); i++) {
 
             Participante p = participantes.get(i);
-            System.out.print("- "+p.getNombre()+": ");
+            System.out.print("- " + p.getNombre() + ": ");
 
             // Espacios que represneta el avance en la pista
-            for (int j = 0; j < participantes.get(i).getPosicion(); j++){
+            for (int j = 0; j < participantes.get(i).getPosicion(); j++) {
                 System.out.print(" ");
             }
 
-            System.out.println("🚗 " + (i + 1));
+            System.out.println(" o==> " + (i + 1));
+        }
+        // 🔥 Hace la animación más lenta y perceptible
+        try {
+            Thread.sleep(400); // Puedes cambiar a 200 o 250 si quieres más lento
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
     /**
-     * Refistra la llegada a la meta y lo almacena en el ranking
-     * Cuando llega el ultimo, imprime el ranking
+     * Refistra la llegada a la meta y lo almacena en el ranking Cuando llega el
+     * ultimo, imprime el ranking
+     *
      * @param p Participante de la carrera
      */
-    public synchronized void registrarLlegada(Participante p, int turnosTotales){
+    public synchronized void registrarLlegada(Participante p, int turnosTotales) {
         ranking.add(p.getNombre());
-        int puesto= ranking.size();
-        RegistrosFinales.registrar(p.getNombre(),puesto,turnosTotales);
+        int puesto = ranking.size();
+        RegistrosFinales.registrar(p.getNombre(), puesto, turnosTotales);
 
-        if (ranking.size() == participantes.size()){
+        if (ranking.size() == participantes.size()) {
             System.out.println("\n=== RANKING FINAL ===");
-            for (int i = 0; i < ranking.size(); i++){
-                System.out.println((i+1)+". "+ranking.get(i));
+            for (int i = 0; i < ranking.size(); i++) {
+                System.out.println((i + 1) + ". " + ranking.get(i));
             }
         }
     }
-
 
     /**
      * Inicia la carrera creando los hilos
      */
-    public synchronized void iniciarCarrera(){
-        for (Participante p: participantes){
+    public synchronized void iniciarCarrera() {
+        for (Participante p : participantes) {
+
             Thread t = new Thread(p);
             t.start();
         }
