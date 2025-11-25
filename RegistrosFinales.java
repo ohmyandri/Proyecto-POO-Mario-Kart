@@ -19,7 +19,7 @@ public class RegistrosFinales {
                if(puesto ==1){
                  escritor.write("********* REGISTROS DE LA ÚLTIMA CARRERA**********");
                }
-                escritor.write("\n--- REGISTROS INDIVIDUALES---\n");
+                escritor.write("\n-----------------------------\n");
                 escritor.write("Nombre del participante: " + nombre + "\n");
                 escritor.write("Puesto en el que quedó: " + puesto + "\n");
                 escritor.write("Turnos necesarios para completar la carrera: " + turnosTotales + "\n");
