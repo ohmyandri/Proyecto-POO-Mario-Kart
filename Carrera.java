@@ -109,7 +109,7 @@ public class Carrera {
     public synchronized void registrarLlegada(Participante p, int turnosTotales){
         ranking.add(p.getNombre());
         int puesto= ranking.size();
-        RegistrosFinales.registros(p.getNombre(),puesto,turnosTotales);
+        RegistrosFinales.registrar(p.getNombre(),puesto,turnosTotales);
 
         if (ranking.size() == participantes.size()){
             System.out.println("\n=== RANKING FINAL ===");
