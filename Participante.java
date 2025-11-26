@@ -1,32 +1,50 @@
+// Importando bibliotecas que se usaran a lo largo del codigo
 import java.util.Random;
 
+/**
+ * La clase Participante representa a un coche dentro de la carrera.
+ * Cada participante es un hilo independiente que avanza turno por turno
+ * hasta llegar a la meta. Puede ser afectado por objetos como bloqueo
+ * o reducción de avance, y reporta su progreso a la clase Carrera
+ */
 public class Participante implements Runnable {
-    //Atributos
+    // =====================
+    // ===== ATRIBUTOS =====
+    // =====================
 
-    // Nombre del participante
+    /** Nombre del participante/coche */
     private final String nombre;
 
-    //Posicion actual en la pista
+    /** Posición actual en la pista (0 = inicio) */
     private int posicion;
 
-    //Turnos que el cohce permanece detenido por un objeto
+    /** Cantidad de turnos que el coche permanece detenido por un objeto */
     private int turnosBloqueado;
 
-    //Turnos que el coche temdra el dado reducido
+    /** Cantidad de turnos que el dado estará reducido (solo avanza 1-3) */
     private int turnosReducido;
 
-    //Indica si ya llego a la meta
+    /** Indica si el coche ya ha llegado a la meta */
     private boolean llegoMeta;
-    //Almacena los turnos que ocupo cada participante para llegar
+
+
+    /** Número total de turnos que el participante ha utilizado en la carrera */
     private int turnosTotales=0;
 
+    /** Referencia al objeto Carrera para reportar movimientos y llegadas */
     private final Carrera carrera;
+
+    /** Generador de números aleatorios para simular el dado de avance */
     private Random random;
 
-
+    /**
+     * Constructor que inicializa todos los atributos del participante
+     * @param nombre Nombre del participante
+     * @param carrera Referencia a la carrera en la que participa
+     */
     public Participante(String nombre, Carrera carrera) {
         this.nombre = nombre;
-        this.posicion = 0;
+        this.posicion = 0; //Comienza en la línea de salida
         this.carrera = carrera;
         this.turnosBloqueado = 0;
         this.turnosReducido = 0;
@@ -34,89 +52,137 @@ public class Participante implements Runnable {
         this.random = new Random();
     }
 
+
+    /**
+     * Metodo ejecutado cuando se inicia el hilo
+     * Controla el ciclo de turnos del coche hasta que llegue a la meta
+     */
     @Override
     public void run() {
 
-        //El hilo continua hasta que llegue a la meta
+        // El participante continua hasta que llegue a la meta
         while (!llegoMeta) {
-            //Cada while representa un turno más
+
+            // Cada iteración del ciclo representa un turno
             turnosTotales++;
+
+            // REVISAR SI ESTA BLOQUEADO
             if (turnosBloqueado > 0) {
-                //No se mueve por este turno
+
+                // No avanza este turno
                 turnosBloqueado--;
+
+                // Se actualiza pantalla para mostrar el estado del coche
                 carrera.refrescarPantalla();
+
+                // Pausa visual entre turnos
                 dormirTurno();
+
+                // Saltamos al siguiente turno
                 continue;
             }
 
-            //Elige que tipo de dado realiza dependiendo si tiene efecto de Objeto
+            // SELECCIONAR EL DADO (normal o reducido)
             int maxDado;
+
             if (turnosReducido > 0){
+
+                // Dado reducido (efecto de objeto)
                 maxDado = 3;
+
             }else {
+
+                // Dado normal
                 maxDado = 6;
             }
 
-            //Avance aleatorio entre 1 y maxDado
+            // AVANZAR DE MANERA ALEATORIA
             int avance = random.nextInt(maxDado) + 1;
             posicion += avance;
 
-            // Reducimos los turnos restantes del estado reducido
+            // Reducir duración del efecto de reducción si estaba activo
             if (turnosReducido > 0) {
                 turnosReducido--;
             }
 
-            // Notificamos a la carrera el movimiento
+            // Reportar a Carrera el avance actual
             carrera.actualizarParticipante(this);
 
-            //Verifica si llego a la meta
+            // VERIFICAR SI LLEGO A LA META
             if (posicion >= Carrera.META) {
+
+                // Ajustar si se pasa exacto
                 posicion = Carrera.META;
                 llegoMeta = true;
+
+                // Registrar al participante en el ranking final
                 carrera.registrarLlegada(this,turnosTotales);
             }
 
-            //Refrescamos la animacion
+            // REFRESCAR ANIMACIÓN
             carrera.refrescarPantalla();
 
-            //Pausa para simular la animacion
+            // Espera entre turnos para controlar velocidad
             dormirTurno();
         }
     }
 
+    // ==============================
+    // ===== METODOS AUXILIARES =====
+    // ==============================
+
 
     /**
-     * Simula el tiempo de espera entre turnos
+     * Simula el tiempo que tarda un turno en completarse.
+     * Controla la velocidad de la animación en consola.
      */
     private void dormirTurno(){
         try{
-            Thread.sleep(300); //Velocidad de animacion
+            //Velocidad de animación
+            Thread.sleep(300);
+            
         }catch (InterruptedException e){
             Thread.currentThread().interrupt();
         }
     }
 
-    //Aplica un bloqueo de N turnos por efecto de un objeto
+    /**
+     * Aplica un bloqueo de N turnos al participante
+     *
+     * @param turnos Cantidad de turnos que no podrá avanzar
+     */
     public void aplicarBloqueo(int turnos){
-        //Se toma el maximo bloqueo por si ya tenia algo aplicado
+        //Se toma el maximo bloqueo por si ya tenía algo aplicado
         this.turnosBloqueado = Math.max(this.turnosBloqueado, turnos);
     }
 
     /**
-     * Aplica una reduccion de dado durante N turnos
-     * Avanzara con dado de 1 a 3
+     * Aplica una reducción de dado durante N turnos.
+     * Durante ese tiempo el coche solo podrá avanzar de 1 a 3 espacios
+     * @param turnos Cantidad de turnos que se aplicara la reducción
      */
-
     public void aplicarReduccion(int turnos){
 
         this.turnosReducido = Math.max(this.turnosReducido, turnos);
     }
 
-    //GETTERS
+
+    // ===================
+    // ===== GETTERS =====
+    // ===================
+
+    /**
+     *
+     * @return Nombre del participante
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     *
+     * @return Posición actual en la pista
+     */
     public int getPosicion() {
         return posicion;
     }
