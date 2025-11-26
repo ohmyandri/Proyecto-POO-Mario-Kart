@@ -113,7 +113,6 @@ public class Participante implements Runnable {
     }
 
     //GETTERS
-
     public String getNombre() {
         return nombre;
     }
